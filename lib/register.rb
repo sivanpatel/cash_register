@@ -65,9 +65,12 @@ class Register
 
   def apply_meal_deal_discount
     minimum_amount_of_products = [find_quantity_of_product_in_cart("soda"), find_quantity_of_product_in_cart("sandwich"), find_quantity_of_product_in_cart("chocolate")].min
-    @total_price += find_quantity_of_product_in_cart("soda") * find_product_price("soda"); update_product_quantity("soda")
-    @total_price += find_quantity_of_product_in_cart("sandwich") * find_product_price("sandwich"); update_product_quantity("sandwich")
-    @total_price += (find_quantity_of_product_in_cart("chocolate") - minimum_amount_of_products) * find_product_price("chocolate"); update_product_quantity("chocolate")
+    (MEAL_DEAL_PRODUCTS - ["chocolate"]).each do |product|
+      @total_price += find_quantity_of_product_in_cart(product) * find_product_price(product)
+      @products.find { |prod| prod[:product] == product }[:quantity] -= minimum_amount_of_products
+    end
+    @total_price += (find_quantity_of_product_in_cart("chocolate") - minimum_amount_of_products) * find_product_price("chocolate")
+    @products.find { |prod| prod[:product] == "chocolate" }[:quantity] -= minimum_amount_of_products
   end
 
   def beer_condition_met
