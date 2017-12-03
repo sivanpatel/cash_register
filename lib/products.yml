@@ -1,0 +1,22 @@
+##########################
+#### Field descriptions ###
+###########################
+# name: name of product
+# price: price of product
+---
+-
+  name: beer
+  price: 1.50
+-
+  name: chips
+  price: 2.00
+-
+  name: chocolate
+  price: 3.10
+-
+  name: soda
+  price: 2.50
+-
+  name: sandwich
+  price: 4.00
+
