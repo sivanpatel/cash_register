@@ -17,8 +17,8 @@ module DiscountRules
     beer_quantity = find_quantity_of_product_in_cart("beer")
     discounted_price = (beer_quantity * find_product_price("beer") + soda_quantity * find_product_price("soda")) / 2
     @total_price += discounted_price
-    update_product_quantity("soda")
-    update_product_quantity("beer")
+    update_product_quantity("soda", soda_quantity)
+    update_product_quantity("beer", beer_quantity)
   end
 
   def bogof_conditions_met
@@ -33,8 +33,8 @@ module DiscountRules
     BOGOF_PRODUCTS.each do |product|
       product_price = find_product_price(product)
       product_quantity = find_quantity_of_product_in_cart(product)
-      @total_price += product_quantity % 2 == 0 ? (product_price * product_quantity)/2 : (product_price * (product_quantity / 2) + product_price)
-      update_product_quantity(product)
+      @total_price += product_quantity % 2 == 0 ? (product_price * product_quantity) / 2 : (product_price * (product_quantity / 2) + product_price)
+      update_product_quantity(product, product_quantity)
     end
   end
 
@@ -63,9 +63,9 @@ module DiscountRules
   def apply_beer_discount
     number_of_beers_in_cart = find_quantity_of_product_in_cart("beer")
     beer_price = find_product_price("beer")
-    @total_price += number_of_beers_in_cart % 3 == 0 ? (beer_price * number_of_beers_in_cart) * 0.9 :
-        (beer_price * (number_of_beers_in_cart / 3) + (beer_price * (number_of_beers_in_cart % 3)))
-    update_product_quantity("beer")
+    number_of_beers_to_discount = number_of_beers_in_cart - (number_of_beers_in_cart % 3)
+    @total_price += beer_price * number_of_beers_to_discount * 0.9
+    update_product_quantity("beer", number_of_beers_to_discount)
   end
 
   def tally_remaining_products
@@ -74,9 +74,9 @@ module DiscountRules
     end
   end
 
-  def update_product_quantity(product)
+  def update_product_quantity(product, quantity)
     if @products.find { |prod| prod[:product] == product }
-      @products.find { |prod| prod[:product] == product }[:quantity] = 0
+      @products.find { |prod| prod[:product] == product }[:quantity] -= quantity
     end
   end
 

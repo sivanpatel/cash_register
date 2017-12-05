@@ -33,4 +33,23 @@ describe Register do
     allow(Time).to receive(:now) { Time.new(2017, 12, 03, 17, 15, 00) }
     expect(register.total_price).to eq 2.00
   end
+
+  it 'only applies happy hour discount if buying more than 3 beers during happy hour' do
+    allow(cart).to receive(:products) { [{ product: "beer", quantity: 5 }] }
+    allow(Time).to receive(:now) { Time.new(2017, 12, 03, 17, 15, 00) }
+    expect(register.total_price).to eq 3.75
+  end
+
+  it 'correctly calculates the first given test' do
+    allow(cart).to receive(:products) { [{ product: "beer", quantity: 4 },
+                                         { product: "chips", quantity: 2 }] }
+    expect(register.total_price).to eq 9.55
+  end
+
+  it 'correctly calculates the second given test' do
+    allow(cart).to receive(:products) { [{ product: "beer", quantity: 1 },
+                                         { product: "chocolate", quantity: 4 }] }
+    allow(Time).to receive(:now) { Time.new(2017, 12, 03, 17, 15, 00) }
+    expect(register.total_price).to eq 6.95
+  end
 end

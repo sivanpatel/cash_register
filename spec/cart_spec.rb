@@ -30,7 +30,7 @@ describe Cart do
   end
 
   it 'creates a cart with products added' do
-    cart = Cart.add_products_to_cart(["beer", "beer", "chocolate"])
+    cart = Cart.add_products_to_cart("beer", "beer", "chocolate")
     expect(cart.products).to eq [{ product: "beer", quantity: 2 }, { product: "chocolate", quantity: 1 }]
   end
 end
