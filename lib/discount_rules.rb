@@ -26,7 +26,7 @@ module DiscountRules
     BOGOF_PRODUCTS.each do |prod|
       products << @products.find { |p| p[:product] == prod }
     end
-    true unless products.empty? || !products.any?
+    true if products.any?
   end
 
   def apply_bogof_discount
