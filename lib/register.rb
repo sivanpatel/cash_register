@@ -28,4 +28,18 @@ class Register
       @total_price += find_product_price(prod[:product]) * find_quantity_of_product_in_cart(prod[:product])
     end
   end
+
+  def update_product_quantity(product, quantity)
+    if @products.find { |prod| prod[:product] == product }
+      @products.find { |prod| prod[:product] == product }[:quantity] -= quantity
+    end
+  end
+
+  def find_product_price(product)
+    PRODUCTS.find { |prod| prod[:name] == product }[:price]
+  end
+
+  def find_quantity_of_product_in_cart(product)
+    @products.find { |prod| prod[:product] == product }&.[](:quantity) || 0
+  end
 end

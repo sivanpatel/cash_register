@@ -53,7 +53,7 @@ module DiscountRules
       @products.find { |prod| prod[:product] == product }[:quantity] -= minimum_amount_of_products
     end
     @total_price += (find_quantity_of_product_in_cart("chocolate") - minimum_amount_of_products) * find_product_price("chocolate")
-    @products.find { |prod| prod[:product] == "chocolate" }[:quantity] -= minimum_amount_of_products
+    update_product_quantity("chocolate", minimum_amount_of_products)
   end
 
   def beer_condition_met
@@ -67,18 +67,4 @@ module DiscountRules
     @total_price += beer_price * number_of_beers_to_discount * 0.9
     update_product_quantity("beer", number_of_beers_to_discount)
   end
-
-  def update_product_quantity(product, quantity)
-    if @products.find { |prod| prod[:product] == product }
-      @products.find { |prod| prod[:product] == product }[:quantity] -= quantity
-    end
-  end
-
-  def find_product_price(product)
-    PRODUCTS.find { |prod| prod[:name] == product }[:price]
-  end
-
-  def find_quantity_of_product_in_cart(product)
-    @products.find { |prod| prod[:product] == product }&.[](:quantity) || 0
-  end
-end
+ end
